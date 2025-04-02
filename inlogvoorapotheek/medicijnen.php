@@ -21,7 +21,7 @@ $result = mysqli_query($conn, $sql);
 <body>
     <header>
         <nav>
-            <a href="index.php">Home</a>
+            <a href="index.">Home</a>
             <a href="medicijnen.php" class="active">Medicijnen</a>
             <a href="over_ons.php">Over Ons</a>
             <a href="bestellingen.php">Bestellingen</a>
@@ -61,7 +61,7 @@ $result = mysqli_query($conn, $sql);
     </div>
     
     <footer>
-        <a href="index.php">Home</a>
+        <a href="index.html">Home</a>
         <a href="over_ons.php">Over Ons</a>
         <a href="service.php">Service & contact</a>
         <p>&copy; 2025 Medicijnen Webshop</p>
