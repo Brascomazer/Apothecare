@@ -170,6 +170,34 @@ footer a {
     color: #0066cc;
 }
 
+.search-filter {
+    display: flex;
+    margin: 20px 0;
+    gap: 10px;
+}
+
+.search-input, .sort-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.search-input {
+    flex-grow: 1;
+}
+
+.sort-select {
+    min-width: 150px;
+}
+
+.geen-resultaten {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    color: #666;
+}
+
 /* Voor kleinere schermen */
 @media (max-width: 768px) {
     .medicijn-knoppen {
