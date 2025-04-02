@@ -19,7 +19,7 @@ new Vue({
         },
         processPayment() {
             // Verzend de betalingsgegevens naar de server
-            fetch('process_payment.php', {
+            fetch('../api/process_payment.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ new Vue({
                 if (data.success) {
                     alert('Betaling succesvol verwerkt!');
                     // Redirect naar een bedankpagina of orderoverzicht
-                    window.location.href = 'order_confirmation.html';
+                    window.location.href = '../pages/order_confirmation.html';
                 } else {
                     alert('Er is een fout opgetreden: ' + data.message);
                 }

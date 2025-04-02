@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'db_connect.php';
+require '../includes/db_connect.php';
 
 // Update database naam in de query
 $conn->select_db("apothecare_db");
@@ -24,7 +24,7 @@ if (mysqli_num_rows($result) > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medicijnen - Apothecare</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
     <!-- Voeg Vue.js toe -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
@@ -33,7 +33,7 @@ if (mysqli_num_rows($result) > 0) {
         <nav>
             <a href="index.html">Home</a>
             <a href="medicijnen.php" class="active">Medicijnen</a>
-            <a href="over_ons.php">Over Ons</a>
+            <a href="over_ons.html">Over Ons</a>
             <a href="bestellingen.php">Bestellingen</a>
             <a href="winkelwagen.php">Winkelwagen</a>
             <a href="hulp.php">Hulp</a>
@@ -75,7 +75,7 @@ if (mysqli_num_rows($result) > 0) {
     
     <footer>
         <a href="index.html">Home</a>
-        <a href="over_ons.php">Over Ons</a>
+        <a href="over_ons.html">Over Ons</a>
         <a href="service.php">Service & contact</a>
         <p>&copy; 2025 Medicijnen Webshop</p>
     </footer>

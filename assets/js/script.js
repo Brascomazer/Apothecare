@@ -8,14 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(this);
             const errorElement = document.getElementById('registratie-error');
             
-            fetch('registreer.php', {
+            fetch('../api/registreer.php', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = data.redirect;
+                    window.location.href = '../pages/' + data.redirect;
                 } else {
                     errorElement.textContent = data.message;
                 }
@@ -35,14 +35,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(this);
             const errorElement = document.getElementById('login-error');
             
-            fetch('login.php', {
+            fetch('../api/login.php', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = data.redirect;
+                    window.location.href = '../pages/' + data.redirect;
                 } else {
                     errorElement.textContent = data.message;
                 }
