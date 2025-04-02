@@ -9,46 +9,13 @@ body {
     background-color: #f5f5f5;
     color: #333;
     line-height: 1.6;
-    padding-bottom: 60px; /* Ruimte voor footer */
-}
-
-nav {
-    background-color: #0066cc;
-    padding: 1rem;
-    text-align: center;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: inline-flex;
-}
-
-nav ul li {
-    margin: 0 10px;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    padding: 5px 10px;
-}
-
-nav ul li a:hover {
-    background-color: rgba(255,255,255,0.2);
-    border-radius: 3px;
 }
 
 header {
-    text-align: center;
-    padding: 2rem;
     background-color: #0066cc;
     color: white;
-    margin-bottom: 2rem;
+    padding: 1rem;
 }
-
 main {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -70,27 +37,68 @@ main {
 .teal { background: #1fa7a7; }
 .yellow { background: #c7b61f; color: #333; }
 
-footer {
-    text-align: center;
-    padding: 1rem;
-    background: #0066cc;
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a {
     color: white;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    border-top: 1px solid rgba(255,255,255,0.2);
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 20px;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 
 
+footer {
+    background-color: #0066cc;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+
+/* Voor kleinere schermen */
 @media (max-width: 768px) {
-    main {
-        grid-template-columns: 1fr;
+    .medicijn-knoppen {
+        flex-direction: column;
     }
     
-    nav ul {
+    .medicijn-prijs-voorraad {
         flex-direction: column;
-        align-items: center;
-        gap: 10px;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        flex-direction: column;
+    }
+    
+    .form-box {
+        margin: 10px 0;
     }
 }
