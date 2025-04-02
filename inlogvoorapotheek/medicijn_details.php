@@ -35,7 +35,7 @@ $medicijn = mysqli_fetch_assoc($result);
 <body>
     <header>
         <nav>
-            <a href="index.php">Home</a>
+            <a href="index.html">Home</a>
             <a href="medicijnen.php">Medicijnen</a>
             <a href="over_ons.php">Over Ons</a>
             <a href="bestellingen.php">Bestellingen</a>
@@ -80,7 +80,7 @@ $medicijn = mysqli_fetch_assoc($result);
     </div>
     
     <footer>
-        <a href="index.php">Home</a>
+        <a href="index.">Home</a>
         <a href="over_ons.php">Over Ons</a>
         <a href="service.php">Service & contact</a>
         <p>&copy; 2025 Medicijnen Webshop</p>
