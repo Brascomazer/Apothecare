@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicijnen Webshop - Inloggen/Registreren</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.php">Home</a>
+            <a href="over_ons.php">Over Ons</a>
+            <a href="bestellingen.php">Bestellingen</a>
+            <a href="winkelwagen.php">Winkelwagen</a>
+            <a href="hulp.php">Hulp</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="hero">
+            <h1>Alles over medicijnen</h1>
+            <p>Betrouwbare informatie van de apotheker</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="form-box">
+                <h2>Registreer</h2>
+                <div id="registratie-error" class="error"></div>
+                <form action="registreer.php" method="post" id="registratie-form">
+                    <div class="form-group">
+                        <label for="naam">Naam:</label>
+                        <input type="text" id="naam" name="naam" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adres">Adres:</label>
+                        <input type="text" id="adres" name="adres" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nummer">Telefoonnummer:</label>
+                        <input type="text" id="nummer" name="nummer" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wachtwoord">Wachtwoord:</label>
+                        <input type="password" id="wachtwoord" name="wachtwoord" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wachtwoord_bevestiging">Wachtwoord bevestigen:</label>
+                        <input type="password" id="wachtwoord_bevestiging" name="wachtwoord_bevestiging" required>
+                    </div>
+                    <button type="submit" name="registreer" class="btn">Registreer</button>
+                </form>
+            </div>
+            
+            <div class="form-box">
+                <h2>Login</h2>
+                <div id="login-error" class="error"></div>
+                <form action="login.php" method="post" id="login-form">
+                    <div class="form-group">
+                        <label for="login_naam">Naam:</label>
+                        <input type="text" id="login_naam" name="login_naam" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login_wachtwoord">Wachtwoord:</label>
+                        <input type="password" id="login_wachtwoord" name="login_wachtwoord" required>
+                    </div>
+                    <button type="submit" name="login" class="btn">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <a href="index.php">Home</a>
+        <a href="over_ons.php">Over Ons</a>
+        <a href="service.php">Service & contact</a>
+        <p>&copy; 2025 Medicijnen Webshop</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
