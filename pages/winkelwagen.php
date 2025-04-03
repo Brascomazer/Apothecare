@@ -4,25 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Winkelwagen - Medicijnen Webshop</title>
-    <link rel="stylesheet" href="winkelwagen.css">
+    <link rel="stylesheet" href="../assets/css/winkelwagen.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">Over Ons</a></li>
-                <li><a href="orders.html">Bestellingen</a></li>
-                <li><a href="cart.html">Winkelwagen</a></li>
-                <li><a href="help.html">Hulp</a></li>
-            </ul>
-        </nav>
-    </header>
+<?php include '../includes/header.php'; ?>
 
     <main>
         <h1>Winkelwagen</h1>
         <div class="cart-container">
-            <form action="process_cart.php" method="post">
+            <form action="../api/process_cart.php" method="post">
                 <table class="cart-table">
                     <thead>
                         <tr>
@@ -33,12 +23,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php include 'display_cart.php'; ?>
+                        <?php include '../api/display_cart.php'; ?>
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="2">Totaal:</td>
-                            <td class="total-price">€<?php include 'calculate_total.php'; ?></td>
+                            <td class="total-price">€<?php include '../api/calculate_total.php'; ?></td>
                             <td></td>
                         </tr>
                     </tfoot>
@@ -54,7 +44,7 @@
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">Over Ons</a></li>
+                <li><a href="over_ons.html">Over Ons</a></li>
                 <li><a href="service.html">Service & contact</a></li>
             </ul>
         </nav>

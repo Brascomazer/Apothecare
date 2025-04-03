@@ -3,20 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medicijnen Webshop - Inloggen/Registreren</title>
+    <title>Medicijnen Webshop - Apothecare</title>
     <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="medicijnen.php">Medicijnen</a>
-            <a href="over_ons.html">Over Ons</a>
-            <a href="bestellingen.php">Bestellingen</a>
-            <a href="winkelwagen.php">Winkelwagen</a>
-            <a href="hulp.php">Hulp</a>
-        </nav>
-    </header>
+<?php include '../includes/header.php'; ?>
     
     <div class="container">
         <div class="hero">
@@ -24,7 +15,8 @@
             <p>Betrouwbare informatie van de apotheker</p>
         </div>
         
-        <div class="form-container">
+        <!-- Login/Registratie forms - worden verborgen als ingelogd -->
+        <div id="auth-forms" class="form-container">
             <div class="form-box">
                 <h2>Registreer</h2>
                 <div id="registratie-error" class="error"></div>
@@ -32,6 +24,14 @@
                     <div class="form-group">
                         <label for="naam">Naam:</label>
                         <input type="text" id="naam" name="naam" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="geboortedatum">Geboortedatum:</label>
+                        <input type="date" id="geboortedatum" name="geboortedatum" required>
                     </div>
                     <div class="form-group">
                         <label for="adres">Adres:</label>
@@ -58,8 +58,8 @@
                 <div id="login-error" class="error"></div>
                 <form action="../api/login.php" method="post" id="login-form">
                     <div class="form-group">
-                        <label for="login_naam">Naam:</label>
-                        <input type="text" id="login_naam" name="login_naam" required>
+                        <label for="login_email">E-mail:</label>
+                        <input type="email" id="login_email" name="login_email" required>
                     </div>
                     <div class="form-group">
                         <label for="login_wachtwoord">Wachtwoord:</label>
@@ -69,15 +69,47 @@
                 </form>
             </div>
         </div>
+        
+        <!-- Welkomstbericht dat wordt getoond als gebruiker ingelogd is -->
+        <div id="welcome-message" class="form-box" style="display:none;">
+            <h2>Welkom bij Apothecare</h2>
+            <p>Je bent succesvol ingelogd.</p>
+            <div class="action-buttons">
+                <a href="medicijnen.php" class="btn">Bekijk medicijnen</a>
+                <a href="dashboard.php" class="btn">Ga naar dashboard</a>
+            </div>
+        </div>
     </div>
     
     <footer>
         <a href="index.html">Home</a>
-        <a href="over_ons.php">Over Ons</a>
+        <a href="over_ons.html">Over Ons</a>
         <a href="service.php">Service & contact</a>
         <p>&copy; 2025 Medicijnen Webshop</p>
     </footer>
 
     <script src="../assets/js/script.js"></script>
+    <script>
+        // Controleer login status en toon juiste elementen
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('../api/check_login.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.loggedIn) {
+                        // Gebruiker is ingelogd
+                        document.getElementById('auth-forms').style.display = 'none';
+                        document.getElementById('welcome-message').style.display = 'block';
+                        
+                        // Voeg uitlog knop toe aan de navigatie
+                        const nav = document.getElementById('main-nav');
+                        const logoutLink = document.createElement('a');
+                        logoutLink.href = '../api/logout.php';
+                        logoutLink.textContent = 'Uitloggen';
+                        logoutLink.className = 'logout-btn';
+                        nav.appendChild(logoutLink);
+                    }
+                });
+        });
+    </script>
 </body>
 </html>

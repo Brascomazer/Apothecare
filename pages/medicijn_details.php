@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'db_connect.php';
+require '../includes/db_connect.php';
 
 // Update database naam in de query
 $conn->select_db("apothecare_db");
@@ -30,19 +30,10 @@ $medicijn = mysqli_fetch_assoc($result);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($medicijn['naam']); ?> - Apothecare</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="medicijnen.php">Medicijnen</a>
-            <a href="over_ons.php">Over Ons</a>
-            <a href="bestellingen.php">Bestellingen</a>
-            <a href="winkelwagen.php">Winkelwagen</a>
-            <a href="hulp.php">Hulp</a>
-        </nav>
-    </header>
+<?php include '../includes/header.php'; ?>
     
     <div class="container">
         <div class="form-box medicijn-details">

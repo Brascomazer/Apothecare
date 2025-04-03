@@ -1,6 +1,10 @@
 <?php
 session_start();
 require '../includes/db_connect.php';
+require '../includes/session_helper.php';
+
+// Sessie controleren
+start_secure_session();
 
 // Update database naam in de query
 $conn->select_db("apothecare_db");
@@ -29,16 +33,7 @@ if (mysqli_num_rows($result) > 0) {
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="medicijnen.php" class="active">Medicijnen</a>
-            <a href="over_ons.html">Over Ons</a>
-            <a href="bestellingen.php">Bestellingen</a>
-            <a href="winkelwagen.php">Winkelwagen</a>
-            <a href="hulp.php">Hulp</a>
-        </nav>
-    </header>
+    <?php include '../includes/header.php'; ?>
     
     <div id="app" class="container">
         <div class="hero">
