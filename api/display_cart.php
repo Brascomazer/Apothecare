@@ -1,5 +1,5 @@
 <?php
-include 'db_connection.php';
+include '../includes/db_connection.php';  // Pad veranderen
 
 // Voorbeeld: haal producten op uit de database (in een echte app zou je de sessie of user ID gebruiken)
 $sql = "SELECT * FROM winkelwagen";

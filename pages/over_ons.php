@@ -7,16 +7,7 @@
     <link rel="stylesheet" href="../assets/css/OverOns.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="medicijnen.php">Medicijnen</a>
-            <a href="OverOns.html">Over Ons</a>
-            <a href="bestellingen.php">Bestellingen</a>
-            <a href="winkelwagen.php">Winkelwagen</a>
-            <a href="hulp.php">Hulp</a>
-        </nav>
-    </header>
+<?php include '../includes/header.php'; ?>
     
     <div class="container">
         <div class="hero">

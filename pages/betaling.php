@@ -4,21 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Betalen - Medicijnen Webshop</title>
-    <link rel="stylesheet" href="betaling.css">
+    <link rel="stylesheet" href="../assets/css/betaling.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">Over Ons</a></li>
-                <li><a href="orders.html">Bestellingen</a></li>
-                <li><a href="cart.html">Winkelwagen</a></li>
-                <li><a href="help.html">Hulp</a></li>
-            </ul>
-        </nav>
-    </header>
+<?php include '../includes/header.php'; ?>
 
     <main id="app">
         <h1>Winkelwagen</h1>
@@ -58,6 +48,6 @@
         </ul>
     </footer>
 
-    <script src="app.js"></script>
+    <script src="../assets/js/betaling.js"></script>
 </body>
 </html>

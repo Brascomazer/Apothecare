@@ -1,18 +1,19 @@
 <?php
 session_start();
-require 'db_connect.php';
+require '../includes/db_connect.php';
+require '../includes/session_helper.php';
 
 $response = ['success' => false, 'message' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $naam = trim($_POST['login_naam']);
+    $email = trim($_POST['login_email']); // Aangepast van naam naar email
     $wachtwoord = trim($_POST['login_wachtwoord']);
     
-    if (empty($naam) || empty($wachtwoord)) {
-        $response['message'] = "Gebruikersnaam en wachtwoord zijn verplicht!";
+    if (empty($email) || empty($wachtwoord)) {
+        $response['message'] = "E-mail en wachtwoord zijn verplicht!";
     } else {
-        $stmt = $conn->prepare("SELECT id, naam, wachtwoord FROM gebruikers WHERE naam = ?");
-        $stmt->bind_param("s", $naam);
+        $stmt = $conn->prepare("SELECT klant_id, naam, wachtwoord FROM klant WHERE email = ?");
+        $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
         
@@ -20,15 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $gebruiker = $result->fetch_assoc();
             
             if (password_verify($wachtwoord, $gebruiker['wachtwoord'])) {
-                $_SESSION['gebruiker_id'] = $gebruiker['id'];
-                $_SESSION['gebruiker_naam'] = $gebruiker['naam'];
+                // Gebruik de nieuwe login_user functie
+                login_user($gebruiker['klant_id'], $gebruiker['naam']);
+                
                 $response['success'] = true;
                 $response['redirect'] = 'dashboard.php';
             } else {
-                $response['message'] = "Ongeldige gebruikersnaam of wachtwoord!";
+                $response['message'] = "Ongeldig e-mailadres of wachtwoord!";
             }
         } else {
-            $response['message'] = "Ongeldige gebruikersnaam of wachtwoord!";
+            $response['message'] = "Ongeldig e-mailadres of wachtwoord!";
         }
         $stmt->close();
     }

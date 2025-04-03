@@ -1,5 +1,5 @@
 <?php
-include 'db_connection.php';
+include '../includes/db_connection.php';  // Pad veranderen
 
 // Verwerk verwijderingen
 if (isset($_POST['remove']) && is_array($_POST['remove'])) {
@@ -21,11 +21,11 @@ if (isset($_POST['quantity']) && is_array($_POST['quantity'])) {
 
 // Doorsturen naar betaling
 if (isset($_POST['checkout'])) {
-    header("Location: checkout.php");
+    header("Location: ../pages/betaling.html");
     exit();
 }
 
 $conn->close();
-header("Location: cart.html");
+header("Location: ../pages/winkelwagen.html");
 exit();
 ?>
