@@ -21,8 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $gebruiker = $result->fetch_assoc();
             
             if (password_verify($wachtwoord, $gebruiker['wachtwoord'])) {
-                // Gebruik de nieuwe login_user functie
-                login_user($gebruiker['klant_id'], $gebruiker['naam']);
+                // Zorg ervoor dat gebruiker_id correct wordt ingesteld
+                $_SESSION['gebruiker_id'] = $gebruiker['klant_id'];
+                $_SESSION['gebruiker_naam'] = $gebruiker['naam'];
                 
                 $response['success'] = true;
                 $response['redirect'] = 'dashboard.php';

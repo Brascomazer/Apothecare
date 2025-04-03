@@ -20,6 +20,9 @@ if (mysqli_num_rows($result) > 0) {
         $medicijnen[] = $row;
     }
 }
+
+// Controleer of gebruiker is ingelogd
+$is_ingelogd = is_logged_in();
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +32,7 @@ if (mysqli_num_rows($result) > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medicijnen - Apothecare</title>
     <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Voeg Vue.js toe -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
@@ -60,20 +64,23 @@ if (mysqli_num_rows($result) > 0) {
                 <p class="medicijn-prijs">€{{ formatteerPrijs(medicijn.prijs) }}</p>
                 <p>Voorraad: {{ medicijn.hoeveelheid }}</p>
                 <div class="medicijn-knoppen">
-                    <a :href="'medicijn_details.php?id=' + medicijn.medicijn_id" class="btn">Meer informatie</a>
-                    <button class="btn" @click="toevoegenAanWinkelwagen(medicijn)">In winkelwagen</button>
+                    <a :href="'medicijn_details.php?id=' + medicijn.medicijn_id" class="btn btn-outline">Meer informatie</a>
+                    <?php if ($is_ingelogd): ?>
+                        <button class="btn btn-primary" @click="toevoegenAanWinkelwagen(medicijn)">
+                            <i class="fas fa-shopping-cart"></i> In winkelwagen
+                        </button>
+                    <?php else: ?>
+                        <a href="login.php" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i> Inloggen om te bestellen
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
             <p v-if="gefilterdeMedicijnen.length === 0" class="geen-resultaten">Geen medicijnen gevonden</p>
         </div>
     </div>
     
-    <footer>
-        <a href="index.html">Home</a>
-        <a href="over_ons.html">Over Ons</a>
-        <a href="service.php">Service & contact</a>
-        <p>&copy; 2025 Medicijnen Webshop</p>
-    </footer>
+    <?php include '../includes/footer.php'; ?>
 
     <script>
         // Maak hier het Vue-object aan en geef de PHP-data direct door aan Vue
@@ -95,7 +102,7 @@ if (mysqli_num_rows($result) > 0) {
                         const zoekLowerCase = this.zoekterm.toLowerCase();
                         result = result.filter(item => 
                             item.naam.toLowerCase().includes(zoekLowerCase) || 
-                            item.beschrijving.toLowerCase().includes(zoekLowerCase)
+                            (item.beschrijving && item.beschrijving.toLowerCase().includes(zoekLowerCase))
                         );
                     }
                     
@@ -124,16 +131,31 @@ if (mysqli_num_rows($result) > 0) {
                     });
                 },
                 toevoegenAanWinkelwagen(medicijn) {
-                    // Hier kun je een AJAX-verzoek doen of sessie-opslag gebruiken
-                    // Voor nu een eenvoudige melding:
-                    alert('Medicijn "' + medicijn.naam + '" toegevoegd aan winkelwagen!');
-                    
-                    // Dit kan later uitgebreid worden met AJAX:
-                    // fetch('add_to_cart.php', {
-                    //    method: 'POST',
-                    //    body: JSON.stringify({ medicijn_id: medicijn.medicijn_id, aantal: 1 }),
-                    //    headers: { 'Content-Type': 'application/json' }
-                    // })
+                    // Gebruik fetch API om add_to_cart.php aan te roepen
+                    fetch('../api/add_to_cart.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            product_id: medicijn.medicijn_id,
+                            quantity: 1
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Response from server:', data); // Debug info
+                        
+                        if (data.success) {
+                            alert(data.message || 'Product toegevoegd aan winkelwagen!');
+                        } else {
+                            alert(data.message || 'Er is een probleem opgetreden.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Er is een fout opgetreden bij het toevoegen aan de winkelwagen.');
+                    });
                 }
             }
         });
