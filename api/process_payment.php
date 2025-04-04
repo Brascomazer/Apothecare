@@ -1,60 +1,88 @@
 <?php
+session_start();
+require_once '../includes/db_connect.php';
+require_once '../includes/session_helper.php';
+
 header('Content-Type: application/json');
 
-// Database configuratie
-$servername = "localhost";
-$username = "username"; // Vervang met je database gebruikersnaam
-$password = "password"; // Vervang met je database wachtwoord
-$dbname = "medicijnen_webshop";
+// Controleer of gebruiker is ingelogd
+if (!is_logged_in()) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Je moet ingelogd zijn om deze actie uit te voeren.'
+    ]);
+    exit;
+}
 
 try {
-    // Maak verbinding met de database
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
     // Ontvang de POST data
-    $json = file_get_contents('php://input');
-    $data = json_decode($json, true);
-
+    $data = json_decode(file_get_contents('php://input'), true);
+    
     // Valideer de data
-    if (!isset($data['cartItems']) || !isset($data['totalPrice']) || !isset($data['selectedBank'])) {
+    if (!isset($data['bestelling_id']) || !isset($data['payment_method'])) {
         throw new Exception('Ongeldige betalingsgegevens ontvangen.');
     }
-
-    // Begin een transactie
-    $conn->beginTransaction();
-
-    // 1. Sla de bestelling op in de orders tabel
-    $stmt = $conn->prepare("INSERT INTO orders (total_price, payment_method, order_date) VALUES (:total_price, :payment_method, NOW())");
-    $stmt->execute([
-        ':total_price' => $data['totalPrice'],
-        ':payment_method' => $data['selectedBank']
-    ]);
-    $orderId = $conn->lastInsertId();
-
-    // 2. Sla de order items op in de order_items tabel
-    $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, quantity, price) VALUES (:order_id, :product_name, :quantity, :price)");
     
-    foreach ($data['cartItems'] as $item) {
-        $stmt->execute([
-            ':order_id' => $orderId,
-            ':product_name' => $item['product'],
-            ':quantity' => $item['quantity'],
-            ':price' => $item['price']
-        ]);
+    $bestelling_id = (int)$data['bestelling_id'];
+    $payment_method = $data['payment_method'];
+    $klant_id = $_SESSION['gebruiker_id'];
+    
+    // Controleer of de bestelling bestaat en van deze klant is
+    $check_sql = "SELECT bestelling_id FROM bestelling 
+                 WHERE bestelling_id = ? AND klant_id = ? AND status = 'in behandeling'";
+    $check_stmt = $conn->prepare($check_sql);
+    $check_stmt->bind_param("ii", $bestelling_id, $klant_id);
+    $check_stmt->execute();
+    $check_result = $check_stmt->get_result();
+    
+    if ($check_result->num_rows === 0) {
+        throw new Exception('Ongeldige bestelling');
     }
-
-    // 3. Maak de winkelwagen leeg (als je een winkelwagen tabel hebt)
-    // $stmt = $conn->prepare("DELETE FROM shopping_cart WHERE user_id = :user_id");
-    // $stmt->execute([':user_id' => $_SESSION['user_id']]);
-
+    
+    $check_stmt->close();
+    
+    // Begin een transactie
+    $conn->begin_transaction();
+    
+    // Update het bezorginformatie veld met de betaalmethode
+    $update_sql = "UPDATE bestelling SET 
+                  bezorginformatie = CONCAT(IFNULL(bezorginformatie, ''), ' Betaalmethode: ', ?),
+                  status = 'verzonden'
+                  WHERE bestelling_id = ?";
+    $update_stmt = $conn->prepare($update_sql);
+    $update_stmt->bind_param("si", $payment_method, $bestelling_id);
+    $update_stmt->execute();
+    $update_stmt->close();
+    
+    // Verlaag de voorraad van elk medicijn
+    $inventory_sql = "SELECT medicijn_id, hoeveelheid FROM bestelling_medicijn WHERE bestelling_id = ?";
+    $inventory_stmt = $conn->prepare($inventory_sql);
+    $inventory_stmt->bind_param("i", $bestelling_id);
+    $inventory_stmt->execute();
+    $inventory_result = $inventory_stmt->get_result();
+    
+    while ($item = $inventory_result->fetch_assoc()) {
+        $update_inventory_sql = "UPDATE medicijn 
+                              SET hoeveelheid = hoeveelheid - ? 
+                              WHERE medicijn_id = ? AND hoeveelheid >= ?";
+        $update_inventory_stmt = $conn->prepare($update_inventory_sql);
+        $update_inventory_stmt->bind_param("iii", $item['hoeveelheid'], $item['medicijn_id'], $item['hoeveelheid']);
+        $update_inventory_stmt->execute();
+        $update_inventory_stmt->close();
+    }
+    
+    $inventory_stmt->close();
+    
     // Commit de transactie
     $conn->commit();
-
+    
+    // Verwijder de bestelling ID uit de sessie, bestelling is nu verwerkt
+    unset($_SESSION['bestelling_id']);
+    
     // Stuur een succesvolle response terug
     echo json_encode([
         'success' => true,
-        'orderId' => $orderId
+        'order_id' => $bestelling_id
     ]);
 
 } catch (Exception $e) {
@@ -68,4 +96,6 @@ try {
         'message' => $e->getMessage()
     ]);
 }
+
+$conn->close();
 ?>

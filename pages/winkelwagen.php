@@ -17,6 +17,15 @@ require_once '../includes/db_connect.php';
 
     <div class="container">
         <h1>Winkelwagen</h1>
+
+        <?php if (isset($_SESSION['cart_message'])): ?>
+            <div class="alert alert-success">
+                <?php 
+                    echo $_SESSION['cart_message']; 
+                    unset($_SESSION['cart_message']); 
+                ?>
+            </div>
+        <?php endif; ?>
         
         <?php if (!is_logged_in()): ?>
             <div class="not-logged-in">
@@ -111,7 +120,11 @@ require_once '../includes/db_connect.php';
                                             echo "<td>" . htmlspecialchars($row['naam']) . "</td>";
                                             echo "<td><input type='number' name='quantity[" . $row['medicijn_id'] . "]' value='" . $row['hoeveelheid'] . "' min='1'></td>";
                                             echo "<td>€" . number_format($totaal_prijs, 2, ',', '.') . "</td>";
-                                            echo "<td><input type='checkbox' name='remove[]' value='" . $row['medicijn_id'] . "'></td>";
+                                            echo "<td>
+                                                <button type='button' class='remove-item-btn' data-id='" . $row['medicijn_id'] . "' data-bestelling='" . $bestelling_id . "'>
+                                                    <i class='fas fa-trash'></i>
+                                                </button>
+                                            </td>";
                                             echo "</tr>";
                                         }
                                         
@@ -169,6 +182,9 @@ require_once '../includes/db_connect.php';
                             <i class="fas fa-arrow-left"></i> Verder winkelen
                         </a>
                         <?php if (!$empty_cart): ?>
+                            <button type="submit" name="update" class="btn btn-secondary">
+                                <i class="fas fa-sync"></i> Bijwerken
+                            </button>
                             <button type="submit" name="checkout" class="btn btn-primary">
                                 <i class="fas fa-shopping-cart"></i> Afrekenen
                             </button>
@@ -181,6 +197,47 @@ require_once '../includes/db_connect.php';
 
     <?php include '../includes/footer.php'; ?>
     <script src="../assets/js/script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Selecteer alle verwijder-knoppen
+        const removeButtons = document.querySelectorAll('.remove-item-btn');
+        
+        // Voeg event listener toe aan elke knop
+        removeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                if (confirm('Weet je zeker dat je dit product wilt verwijderen?')) {
+                    const medicijnId = this.getAttribute('data-id');
+                    const bestellingId = this.getAttribute('data-bestelling');
+                    
+                    // Ajax verzoek om item direct te verwijderen
+                    fetch('../api/remove_item.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            medicijn_id: medicijnId,
+                            bestelling_id: bestellingId
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Als succesvol, herlaad de pagina om de wijzigingen te tonen
+                            window.location.reload();
+                        } else {
+                            alert('Fout bij het verwijderen: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Er is een fout opgetreden bij het verwijderen.');
+                    });
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>
 <?php
