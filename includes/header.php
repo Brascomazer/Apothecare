@@ -39,6 +39,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 </header>
 
+<link rel="stylesheet" href="../assets/css/chat.css">
+
 <script>
     // Menu toggle voor mobiele weergave
     document.getElementById('menu-toggle').addEventListener('click', function() {

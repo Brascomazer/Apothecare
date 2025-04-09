@@ -51,3 +51,4 @@
         </div>
     </div>
 </footer>
+<script src="../assets/js/chat.js"></script>
